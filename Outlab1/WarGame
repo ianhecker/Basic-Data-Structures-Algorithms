@@ -1,0 +1,264 @@
+
+/*
+ * author@ Ian Hecker
+ * CS132 Outlab 1 "War Game"
+ * 9/7/16
+ *
+ */
+package cs132_wargame;
+
+public class WarGame
+{
+    private int[] player1;
+    private int[] player2;
+    private int[] p1Winnings;
+    private int[] p2Winnings;
+    
+    public WarGame(int totalCards)  //Creating Player arrays
+    {
+        player1 = new int[totalCards];
+        player2 = new int[totalCards];
+        p1Winnings = new int[totalCards];
+        p2Winnings = new int[totalCards];
+    }
+    public void assignCards(int[] gameCards){
+        int deckAssign = 0;
+        for(int assign=0; assign<(player1.length/2); assign++){
+            player1[assign] = gameCards[deckAssign];
+            deckAssign++;
+            player2[assign] = gameCards[deckAssign];
+            deckAssign++;
+        }   //Splits deck in half, evenly distributing numbers - for simplicity
+    }
+    public void shuffleCards() //Assigning random cards
+    {
+        int[] shuffle1 = new int[24];
+        int[] shuffle2 = new int[24];
+        int pos1 = 0;
+        int pos2 = 0;
+        boolean stopLoop = false;
+        
+        for(int cardPos=0; cardPos<player1.length; cardPos++){
+            if(p1Winnings[cardPos] != 0){
+                shuffle1[pos1] = p1Winnings[cardPos];
+                p1Winnings[cardPos] = 0;
+                pos1++;
+            }
+            if(p2Winnings[cardPos] != 0){
+                shuffle2[pos2] = p2Winnings[cardPos];
+                p2Winnings[cardPos] = 0;
+                pos2++;
+            }
+            if(player1[cardPos] != 0){
+                shuffle1[pos1] = player1[cardPos];
+                player1[cardPos] = 0;
+                pos1++;
+            }
+            if(player2[cardPos] != 0){
+                shuffle2[pos2] = player2[cardPos];
+                player2[cardPos] = 0;
+                pos2++;
+            }
+        }
+        pos1 = 0;
+        pos2 = 0;
+        int randomInt;
+        int zeroCheckSum = -1;
+        while(stopLoop != true){
+            randomInt = (int)(Math.random()*24); 
+            if(player1[pos1] == 0 && shuffle1[randomInt] != 0){ 
+                player1[pos1] = shuffle1[randomInt];
+                pos1++;
+                shuffle1[randomInt] = 0;
+            }
+            randomInt = (int)(Math.random()*24); 
+            if(player2[pos2] == 0 && shuffle2[randomInt] != 0){
+                player2[pos2] = shuffle2[randomInt];
+                pos2++;
+                shuffle2[randomInt] = 0;
+            }
+            if(pos1+pos2 >= 20){
+                for(int zeroCheck=0; zeroCheck<shuffle1.length; zeroCheck++){ //Checking that all shuffle values assigned
+                    zeroCheckSum += (shuffle1[zeroCheck]+shuffle2[zeroCheck]);
+                }
+                if(zeroCheckSum == 0){
+                    stopLoop = true;
+                }
+                else{
+                    zeroCheckSum = 0;
+                }
+            } 
+        }
+    }
+    public void playWar()
+    {
+        int cardWon = 0;
+        boolean gameOver = false;
+        int player1Sum = 0,
+                player2Sum = 0,
+                    stopEndlessLoop = 0,
+                        cardPos = 0;
+        int[] betHolder;
+        betHolder = new int[player1.length];
+                
+        
+        while(gameOver != true)//Main Game Mechanic
+        {
+        //---Comparing-PLayer-Hands---//
+            printHands();
+            if(player1[cardPos]>player2[cardPos]){
+                cardWon = player2[cardPos];
+                player2[cardPos] = 0;
+                for(int reAssign=0; reAssign < player1.length; reAssign++){
+                    if(p1Winnings[reAssign] == 0){
+                        p1Winnings[reAssign] = cardWon; //Put won card into winnings hand
+                        break; //Stop For-Loop
+                    }
+                }
+            }
+            else if(player2[cardPos]>player1[cardPos]){
+                cardWon = player1[cardPos];
+                player1[cardPos] = 0;
+                for(int reAssign=0; reAssign < player2.length; reAssign++){
+                    if(p2Winnings[reAssign] == 0){
+                        p2Winnings[reAssign] = cardWon; //Put won card into winnings hand
+                        break; //Stop For-Loop
+                    }
+                }
+            }
+            
+            
+            else if(player1[cardPos] == player2[cardPos]){
+                int betLength = 0;
+                int bet1Check = 0;
+                int bet2Check = 0;
+                int arrayCheck = 0;
+                
+                if(cardPos+4>player1.length){
+                    arrayCheck = (cardPos+4) - player1.length;
+                }
+                for(int i=1; i<5; i++){
+                    if(player1[cardPos+i] != 0){
+                        bet1Check++;
+                    }
+                    if(player2[cardPos+i] != 0){
+                        bet2Check++;
+                    }
+                }
+                if(arrayCheck < bet1Check || arrayCheck < bet2Check){
+                    betLength = arrayCheck;
+                }
+                else if(bet1Check < bet2Check){
+                    betLength = bet1Check;
+                }
+                else{
+                    betLength = bet2Check;
+                }
+                int cardCounter = 0;
+                int placeCounter = 0;
+                int duration = betLength;
+                while(duration!=0){
+                    betHolder[placeCounter] = player1[cardPos+cardCounter];
+                    placeCounter++;
+                    betHolder[placeCounter] = player2[cardPos+cardCounter];
+                    placeCounter++;
+                    cardCounter++;
+                    duration--;
+                }
+                if(player1[cardPos+betLength]>player2[cardPos+betLength]){
+                    boolean keepGoing = true;
+                    int spot = 0;
+                    int spot2 = 0;
+                    while(keepGoing == true){
+                        if(p1Winnings[spot] != 0){
+                            p1Winnings[spot] = betHolder[spot2];
+                            spot2++;
+                        }
+                        spot++;
+                        if(spot2>betLength){
+                            keepGoing = false;
+                        }    
+                    }
+                }
+                else if(player2[cardPos+betLength]>player1[cardPos+betLength]){
+                    boolean keepGoing = true;
+                    int spot = 0;
+                    int spot2 = 0;
+                    while(keepGoing == true){
+                        if(p2Winnings[spot] != 0){
+                            p2Winnings[spot] = betHolder[spot2];
+                            spot2++;
+                        }
+                        spot++;
+                        if(spot2>betLength){
+                            keepGoing = false;
+                        }    
+                    }
+                }
+                else{
+                    boolean keepGoing = true;
+                    int spot = 0;
+                    int spot2 = 0;
+                    while(keepGoing == true){
+                        if(p1Winnings[spot] != 0){
+                            p1Winnings[spot] = betHolder[spot2];
+                            spot2++;
+                        }
+                        spot++;
+                        if(spot2>betLength){
+                            keepGoing = false;
+                        }    
+                    }
+                }
+               
+            
+                
+                
+            }//end of tie resolution - else if tie
+            //IMPLEMENT PLAYER EMPTY HAND CHECK HERE
+            int p1Sum=0, 
+                    p2Sum=0,
+                        p1WSum=0,
+                            p2WSum=0;
+            for(int handCheck=0; handCheck < player1.length; handCheck++){
+                p1Sum += player1[handCheck];
+                p2Sum += player2[handCheck];
+                p1WSum += p1Winnings[handCheck];
+                p2WSum += p2Winnings[handCheck];
+            }
+            if(p1Sum == 0 && p1WSum == 0){ //Check if player1 all out of cards
+                gameOver = true;
+                System.out.println("\n+--Final Hands--+");
+                printHands();
+                System.out.println("\nPlayer1 Lost");
+            }
+            else if(p2Sum == 0 && p2WSum == 0){ //Check if player2 all out of cards
+                gameOver = true;
+                System.out.println("\n+--Final Hands--+");
+                printHands();
+                System.out.println("\nPlayer2 Lost");
+            }
+            else if(p1Sum ==0 || p2Sum == 0){ //Check if player out of cards; need to assign winnings to hands
+                shuffleCards();
+            } 
+            cardPos++; //Move to next card Position
+            
+            System.out.printf("\nDebug - Iteration %s\n", stopEndlessLoop);
+            stopEndlessLoop++;
+            if(stopEndlessLoop >= 100){
+                System.out.printf("\nDebug - Game Ceased due to excessive loop\n");
+                gameOver = true;
+            }
+        }//end of while loop
+    }//end of PlayWar method
+    public void printHands(){
+        
+        System.out.printf("Player1      Player2");
+        
+        for(int cardPos=0; cardPos < player1.length; cardPos++){
+            int p1 = player1[cardPos];
+            int p2 = player2[cardPos];
+            System.out.printf("\n%s     %s", p1, p2);
+        }
+    }//end of printHands method 
+}//end of public class Wargame
