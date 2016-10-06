@@ -21,25 +21,39 @@ public class RiffRaffDriver {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Please input file name: ");
-        String fileName = scanner.next();
-        String textLine = null;
-
+        String fileName = scanner.next();       
+        
+        int integer, N, k, m;
+        Scanner fileScan;
+        
         try{
-            FileReader fileReader = new FileReader(fileName);
+            fileScan = new Scanner(new File(fileName));
             
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            for(int iter=0; iter < 3; iter++){
+                integer = fileScan.nextInt();
+                
+                switch (iter) {
+                    case 0:
+                        N = integer;
+                        System.out.println(N);//DEBUGGING ONLY
+                        break;
+                    case 1:
+                        k = integer;
+                        System.out.println(k);//DEBUGGING ONLY
+                        break;
+                    case 2:
+                        m = integer;
+                        System.out.println(m);//DEBUGGING ONLY
+                        break;
+                    default:
+                        break;
+                }//End of switch            
+            }//End of for-loop
+            fileScan.close();
             
-            while((textLine = bufferedReader.readLine()) != null){
-                System.out.println(textLine);
-            }
-            bufferedReader.close();
-        }
+        }        
         catch(FileNotFoundException e){
             System.out.println("Unable to find file \""+fileName+"\"");
-        }
-        catch(IOException e){
-            System.out.println("There was an error reading the file \""+fileName+"\"");
-        }
-
+        }        
     }
 }//End of Driver
