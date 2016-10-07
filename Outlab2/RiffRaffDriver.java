@@ -16,6 +16,8 @@ import java.util.Scanner;
 
 public class RiffRaffDriver {        
     
+    public int N, k, m;    
+    
     public static void main(String [] args){
         
         RiffRaffList list = new RiffRaffList();
@@ -23,11 +25,13 @@ public class RiffRaffDriver {
 
         System.out.println("Place text files in the NetBeans project folder!");
         System.out.println("Please input file name: ");
+        
         //String fileName = scanner.next();       
         
-        String fileName = "text.txt";
-        int nextInteger, N, k, m;
-        nextInteger = k = N = m = 0;
+        System.out.println("\nProgram 4\n---------\n");
+        String fileName = "text.txt";//DEBUGGING ONLY
+        
+        int nextInteger;        
         Scanner fileScan;
         
         try{
@@ -38,16 +42,16 @@ public class RiffRaffDriver {
                 
                 switch (iter) {
                     case 0:
-                        N = nextInteger;
-                        System.out.println(N);//DEBUGGING ONLY
+                        N = nextInteger;                        
+                        System.out.print("N = "+N+", ");
                         break;
                     case 1:
-                        k = nextInteger;
-                        System.out.println(k);//DEBUGGING ONLY
+                        k = nextInteger;                        
+                        System.out.print("k = "+k+", ");
                         break;
                     case 2:
                         m = nextInteger;
-                        System.out.println(m);//DEBUGGING ONLY
+                        System.out.print("m = "+m);
                         break;                                                        
                     default:
                         break;
@@ -57,8 +61,12 @@ public class RiffRaffDriver {
         }        
         catch(FileNotFoundException e){
             System.out.println("Unable to find file \""+fileName+"\"");
-        }        
+        }                                
+        
+        System.out.println("\n\nOutput\n------");
+        
         list.addNumberN(N);        
         list.ringAroundTheRosy(k, m);
+        //list.print();
     }//End of Main
 }//End of Driver
