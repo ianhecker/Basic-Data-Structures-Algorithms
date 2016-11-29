@@ -51,9 +51,16 @@ public class ButtonPanel extends JPanel implements ActionListener{
     }            
     @Override
     public void actionPerformed(ActionEvent e){
-        
-        JButton button = (JButton)e.getSource();
-        String drawString = e.getSource().toString();
+         
+        JTextField textBox = null;
+        try
+        {
+            JButton button = (JButton)e.getSource();
+        }
+        catch (ClassCastException cce)
+        {
+            textBox = (JTextField)e.getSource();
+        }        
         
         if(e.getActionCommand().equals("Clear Drawing")){
             drawingPanel.clear();        
@@ -73,17 +80,16 @@ public class ButtonPanel extends JPanel implements ActionListener{
         else if(e.getActionCommand().equals("Color")){
             Color color = JColorChooser.showDialog(this, "Select a color", Color.BLACK); 
             drawingPanel.setForeground(color);//sets shape color
-            button.setBackground(color);//Sets current color as background
+            //button.setBackground(color);//Sets current color as background
         }        
         else if(e.getActionCommand().equals("Filled")){
             drawingPanel.isFilled = true;            
         }
         else if(e.getActionCommand().equals("Empty")){
             drawingPanel.isFilled = false;            
-        }
-        else if(e.getActionCommand() instanceof String){
-            System.out.println("STRING");
-            drawingPanel.textToBeDrawn = drawString;            
+        }        
+        else if(e.getActionCommand() instanceof String){           
+            drawingPanel.requestToDrawText(textBox.getText());            
         }        
     }//End of ActionPerformed         
 }//End of Class Button Panel

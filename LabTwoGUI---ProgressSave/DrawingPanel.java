@@ -105,7 +105,17 @@ public class DrawingPanel extends JPanel {
             g2d.draw(shape);                       
         }
     }
-    
+    public void requestToDrawText(String textToBeDrawn)
+    {   
+        if(textToBeDrawn == null)
+        {
+            this.textToBeDrawn = "Draw Text";
+        }
+        else
+        {
+            this.textToBeDrawn = textToBeDrawn;
+        }
+    }
     public void addRectangle(Rectangle rectangle, Color color)
     {        
         CustomRectangle cr = new CustomRectangle(color, rectangle, isFilled);
