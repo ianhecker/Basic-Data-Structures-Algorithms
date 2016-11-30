@@ -17,12 +17,14 @@ import java.awt.*;
 public class CustomOval {
     
     private Color foreground;
+    private Color outline;
     private Rectangle oval;
     private boolean filled;
             
-    public CustomOval(Color foreground, Rectangle oval, Boolean filled)
+    public CustomOval(Color foreground, Color outline, Rectangle oval, Boolean filled)
     {        
         this.foreground = foreground;
+        this.outline = outline;
         this.oval = oval;
         this.filled = filled;
     }    
@@ -33,6 +35,14 @@ public class CustomOval {
     public void setForeground(Color foreground)
     {
         this.foreground = foreground;
+    }
+    public Color getOutline()
+    {
+        return outline;
+    }
+    public void setOutline(Color outline)
+    {
+        this.outline = outline;
     }    
     public Rectangle getOval()
     {

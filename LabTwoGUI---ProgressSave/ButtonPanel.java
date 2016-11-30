@@ -29,10 +29,9 @@ public class ButtonPanel extends JPanel implements ActionListener{
         add( createButton("Oval"));
         add( createButton("Line"));
         add( createButton("Text"));
-        add( createTextBox());
-        add( createButton("Filled"));
-        add( createButton("Empty"));
-        add( createButton("Color"));              
+        add( createTextBox());        
+        add( createButton("Fill Color"));              
+        add( createButton("Outline Color"));              
         add( createButton("Clear Drawing"));        
     }    
     private JButton createButton(String text){
@@ -53,9 +52,10 @@ public class ButtonPanel extends JPanel implements ActionListener{
     public void actionPerformed(ActionEvent e){
          
         JTextField textBox = null;
+        JButton button = null;
         try
         {
-            JButton button = (JButton)e.getSource();
+            button = (JButton)e.getSource();
         }
         catch (ClassCastException cce)
         {
@@ -77,17 +77,16 @@ public class ButtonPanel extends JPanel implements ActionListener{
         else if(e.getActionCommand().equals("Text")){
             drawingPanel.shapeToBeDrawn = TEXT;
         }        
-        else if(e.getActionCommand().equals("Color")){
-            Color color = JColorChooser.showDialog(this, "Select a color", Color.BLACK); 
-            drawingPanel.setForeground(color);//sets shape color
-            //button.setBackground(color);//Sets current color as background
+        else if(e.getActionCommand().equals("Fill Color")){
+            Color fillColor = JColorChooser.showDialog(this, "Select a color", Color.BLACK); 
+            drawingPanel.setForeground(fillColor);//sets shape color
+            button.setBackground(fillColor);//Sets current color as background
         }        
-        else if(e.getActionCommand().equals("Filled")){
-            drawingPanel.isFilled = true;            
-        }
-        else if(e.getActionCommand().equals("Empty")){
-            drawingPanel.isFilled = false;            
-        }        
+        else if(e.getActionCommand().equals("Outline Color")){
+            Color outlineColor = JColorChooser.showDialog(this, "Select a color", Color.BLACK); 
+            drawingPanel.setOutline(outlineColor);//sets shape color
+            button.setBackground(outlineColor);//Sets current color as background
+        }                        
         else if(e.getActionCommand() instanceof String){           
             drawingPanel.requestToDrawText(textBox.getText());            
         }        

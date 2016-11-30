@@ -13,29 +13,39 @@ import java.awt.*;
 public class CustomRectangle {
     
     private Color foreground;
+    private Color outline;
     private Rectangle rectangle;
     private boolean filled;
             
-    public CustomRectangle(Color foreground, Rectangle rectangle, Boolean filled){
-        
+    public CustomRectangle(Color foreground, Color outline, Rectangle rectangle, Boolean filled)
+    {        
         this.foreground = foreground;
+        this.outline = outline;
         this.rectangle = rectangle;
         this.filled = filled;
-    }
-    
-    public Color getForeground(){
+    }    
+    public Color getForeground()
+    {
         return foreground;
-    }
-    
-    public void setForeground(Color foreground){
+    }    
+    public void setForeground(Color foreground)
+    {
         this.foreground = foreground;
     }
-    
-    public Rectangle getRectangle(){
-        return rectangle;
+    public Color getOutline()
+    {
+        return outline;
     }
-    
-    public boolean isFilled(){
+    public void setOutline(Color outline)
+    {
+        this.outline = outline;
+    }
+    public Rectangle getRectangle()
+    {
+        return rectangle;
+    }  
+    public boolean isFilled()
+    {
         return filled;
     }
 }

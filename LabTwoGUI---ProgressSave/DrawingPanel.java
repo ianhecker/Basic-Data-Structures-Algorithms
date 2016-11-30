@@ -32,15 +32,16 @@ public class DrawingPanel extends JPanel {
     private Rectangle shape;
     private Line line;
     private Text text;
+    private Color outline;
     
     public int shapeToBeDrawn = RECT;//RECT IS BASE CHOICE
-    public String textToBeDrawn = null;
+    public String textToBeDrawn = "Draw Text";
     public boolean isFilled = false;
     
     public DrawingPanel(){
         
         setBackground(Color.WHITE);
-        
+        outline = Color.BLACK;
         MyMouseListener mouseL = new MyMouseListener();
         addMouseListener(mouseL);
         addMouseMotionListener(mouseL);
@@ -60,8 +61,10 @@ public class DrawingPanel extends JPanel {
             Rectangle r = cr.getRectangle();
             
             if(cr.isFilled() == true){                
-                g.drawRect(r.x, r.y, r.width, r.height);
                 g.fillRect(r.x, r.y, r.width, r.height);
+                g.setColor(cr.getOutline());//Change to outline of shape
+                g.drawRect(r.x, r.y, r.width, r.height);
+                
             }                        
             else{
                 g.drawRect(r.x, r.y, r.width, r.height);
@@ -72,30 +75,24 @@ public class DrawingPanel extends JPanel {
             Rectangle r = co.getOval();
             
             if(co.isFilled() == true){                
-                g.drawOval(r.x, r.y, r.width, r.height);
                 g.fillOval(r.x, r.y, r.width, r.height);
+                g.setColor(co.getOutline());//Change to outline of shape
+                g.drawOval(r.x, r.y, r.width, r.height);                
             }                        
             else{
                 g.drawOval(r.x, r.y, r.width, r.height);
             }            
-        }
-        
+        }        
         for(CustomLine cl : lines)
         {
             g.setColor(cl.getForeground());            
             g.drawLine(cl.x, cl.y, cl.width, cl.height);
-        }
-        
+        }        
         for(CustomString cs : strings)
         {
             g.setColor(cs.getForeground());
             Text t = cs.getString();
-            g.drawString(t.getString(), t.x, t.y);
-            /*
-            g.setColor(Color.BLACK);
-            String str = cs.getString();
-            g.drawString(str, cs.x, cs.y);
-            */
+            g.drawString(t.getString(), t.x, t.y);         
         }        
         
         if (shape != null)//Draws shape when mouse dragged
@@ -107,6 +104,7 @@ public class DrawingPanel extends JPanel {
     }
     public void requestToDrawText(String textToBeDrawn)
     {   
+        System.out.println("TESTING");
         if(textToBeDrawn == null)
         {
             this.textToBeDrawn = "Draw Text";
@@ -116,34 +114,34 @@ public class DrawingPanel extends JPanel {
             this.textToBeDrawn = textToBeDrawn;
         }
     }
-    public void addRectangle(Rectangle rectangle, Color color)
+    public void setOutline(Color outline)
+    {
+        this.outline = outline;
+    }
+    public void addRectangle(Rectangle rectangle, Color fill, Color outline)
     {        
-        CustomRectangle cr = new CustomRectangle(color, rectangle, isFilled);
+        CustomRectangle cr = new CustomRectangle(fill, outline, rectangle, isFilled);
         rectangles.add(cr);
         repaint();                
-    }
-    
-    public void addOval(Rectangle oval, Color color)
+    }    
+    public void addOval(Rectangle oval, Color fill, Color outline)
     {        
-        CustomOval co = new CustomOval(color, oval, isFilled);
+        CustomOval co = new CustomOval(fill, outline, oval, isFilled);
         ovals.add(co);
         repaint();
-    }
-    
+    }    
     public void addLine(Line line, Color color)
     {    
         CustomLine cl = new CustomLine(color, line);
         lines.add(cl);
         repaint();
-    }
-    
+    }    
     public void addText(Text text, Color color)
     {
         CustomString cs = new CustomString(color, text, textToBeDrawn);        
         strings.add(cs);
         repaint();
-    }
-    
+    }    
     public void clear()
     {        
         rectangles.clear();
@@ -201,23 +199,22 @@ public class DrawingPanel extends JPanel {
 
         @Override
         public void mouseReleased(MouseEvent e){
-            if(shapeToBeDrawn == RECT){
+            if(shapeToBeDrawn == RECT){//Creating a Rectangle
                 if(shape.width != 0 || shape.height != 0){
-                    addRectangle(shape, e.getComponent().getForeground());            
+                    addRectangle(shape, e.getComponent().getForeground(), outline);            
                 }
             }
-            else if(shapeToBeDrawn == OVAL){
+            else if(shapeToBeDrawn == OVAL){//Creating an Oval
                 if(shape.width != 0 || shape.height != 0){
-                    addOval(shape, e.getComponent().getForeground());            
+                    addOval(shape, e.getComponent().getForeground(), outline);            
                 }
             }
-            else if(shapeToBeDrawn == LINE){
+            else if(shapeToBeDrawn == LINE){//Creating a Line
                 if(line.x2 != 0 || line.y2 != 0){
                     addLine(line, e.getComponent().getForeground());
                 }
             }
-            else if(shapeToBeDrawn == TEXT)
-            {                
+            else if(shapeToBeDrawn == TEXT){//Creating drawn Text                
                 addText(text, e.getComponent().getForeground());
             }
             shape = null;

@@ -21,15 +21,15 @@ import javax.swing.*;
 public class PaintFrame extends JFrame
 {   
     private final static int FRAME_WIDTH = 1000;
-    private final static int FRAME_HEIGHT = 600;
-    
+    private final static int FRAME_HEIGHT = 600;    
     private final static String IMG_PATH = "src\\javapaintapplication\\resource\\CodedByAMonkey2.jpg";
     
     private void createMyGUI()
     {        
+        JMenuBar menuBar = new JMenuBar();
         DrawingPanel drawingPanel = new DrawingPanel();
         ButtonPanel buttonPanel = new ButtonPanel(drawingPanel);
-        JMenuBar menuBar = new JMenuBar();
+        RadioButtonPanel radioButtonPanel = new RadioButtonPanel(drawingPanel);        
         
         //File Menu
         JMenu fileMenu = new JMenu("File");
@@ -85,8 +85,11 @@ public class PaintFrame extends JFrame
         JFrame frame = new JFrame("Java Paint App");
         frame.setJMenuBar(menuBar);//Put menuBar on frame
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
         frame.getContentPane().add(drawingPanel);
-        frame.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+        frame.getContentPane().add(buttonPanel, BorderLayout.SOUTH);                        
+        frame.getContentPane().add(radioButtonPanel, BorderLayout.WEST);
+        
         frame.setSize(FRAME_WIDTH, FRAME_HEIGHT);        
         frame.setVisible(true);
                 
